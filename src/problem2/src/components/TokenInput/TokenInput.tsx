@@ -1,10 +1,9 @@
 import { useTokens } from "@/hooks";
 import { Token } from "@/interfaces";
-import { KeyboardArrowDown, SearchOutlined } from "@mui/icons-material";
+import { KeyboardArrowDown } from "@mui/icons-material";
 import {
-  Box,
   Chip,
-  InputAdornment,
+  CircularProgress,
   InputLabel,
   Popover,
   Stack,
@@ -12,8 +11,8 @@ import {
   TextFieldProps,
 } from "@mui/material";
 import { useCallback, useState } from "react";
+import SelectToken from "../SelectToken";
 import TokenIcon from "../TokenIcon";
-import TokenList from "../TokenList";
 
 interface TokenInputProps extends Omit<TextFieldProps, "onChange" | "value"> {
   value?: { currency: string; amount: number };
@@ -26,9 +25,7 @@ export default function TokenInput({
   value,
   ...props
 }: TokenInputProps) {
-  const [search, setSearch] = useState("");
-  const { tokens } = useTokens({ search });
-
+  const { tokens, isFetching } = useTokens();
   const [amount, setAmount] = useState(() =>
     value?.amount ? String(value?.amount) : "",
   );
@@ -40,8 +37,9 @@ export default function TokenInput({
 
   const handleChangeAmount = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setAmount(value);
+      const value = e.target.value.replace(/[^0-9.]/g, "");
+      const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      setAmount(formattedValue);
       onChange?.({ currency, amount: Number(value) });
     },
     [currency, onChange],
@@ -58,13 +56,6 @@ export default function TokenInput({
     setAnchorEl(null);
   }, []);
 
-  const handleSearchChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearch(event.target.value);
-    },
-    [],
-  );
-
   const handleSelectToken = useCallback(
     (token: Token) => {
       setCurrency(token.currency);
@@ -76,7 +67,7 @@ export default function TokenInput({
   );
 
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} gap={1}>
       {label && <InputLabel htmlFor={props.id}>{label}</InputLabel>}
       <TextField
         slotProps={{ inputLabel: { sx: { display: "none" } } }}
@@ -85,17 +76,21 @@ export default function TokenInput({
         autoComplete="off"
         {...props}
       />
-      <Stack direction="row" justifyContent="end">
-        <Chip
-          label={currency}
-          icon={<TokenIcon name={currency} />}
-          clickable
-          sx={{ pl: 0.7 }}
-          onDelete={handleClickSelect}
-          deleteIcon={<KeyboardArrowDown />}
-          variant="filled"
-          onClick={handleClickSelect}
-        />
+      <Stack direction="row" alignItems="center" justifyContent="end">
+        {isFetching ? (
+          <CircularProgress size={24} />
+        ) : (
+          <Chip
+            label={currency}
+            icon={<TokenIcon name={currency} />}
+            clickable
+            sx={{ pl: 0.7 }}
+            onDelete={handleClickSelect}
+            deleteIcon={<KeyboardArrowDown />}
+            variant="filled"
+            onClick={handleClickSelect}
+          />
+        )}
       </Stack>
 
       <Popover
@@ -103,26 +98,7 @@ export default function TokenInput({
         anchorEl={anchorEl}
         onClose={handleCloseSelectToken}
       >
-        <Stack p={2} spacing={2}>
-          <TextField
-            placeholder="Search"
-            label="Search"
-            autoComplete="off"
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchOutlined />
-                  </InputAdornment>
-                ),
-              },
-            }}
-            onChange={handleSearchChange}
-          />
-          <Box width={400} maxWidth="100%" maxHeight={500} overflow="auto">
-            <TokenList tokens={tokens} onSelect={handleSelectToken} />
-          </Box>
-        </Stack>
+        <SelectToken onChange={handleSelectToken} />
       </Popover>
     </Stack>
   );

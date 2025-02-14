@@ -3,7 +3,7 @@ import { useHotTokens } from "@/hooks/useHotTokens";
 import { Box, Card, Container, Grid2, Stack, Typography } from "@mui/material";
 
 export default function SwapPage() {
-  const { hotTokens } = useHotTokens();
+  const { hotTokens, isFetching } = useHotTokens();
 
   return (
     <Box minHeight="100dvh">
@@ -17,7 +17,7 @@ export default function SwapPage() {
               <Card variant="outlined" sx={{ p: 2 }}>
                 <Stack gap={2}>
                   <Typography variant="h3">Hot tokens</Typography>
-                  <TokenList tokens={hotTokens} />
+                  <TokenList loading={isFetching} tokens={hotTokens} />
                 </Stack>
               </Card>
             </Stack>
