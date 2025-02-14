@@ -1,14 +1,5 @@
-// FIXED: I think the currency can be static in a long time, so I think we can use enum
-enum Currency {
-  Osmosis = "Osmosis",
-  Ethereum = "Ethereum",
-  Arbitrum = "Arbitrum",
-  Zilliqa = "Zilliqa",
-  Neo = "Neo",
-}
-
 interface WalletBalance {
-  currency: Currency;
+  currency: string;
   amount: number;
 }
 interface FormattedWalletBalance {
@@ -27,28 +18,22 @@ const useWalletBalances: UseWalletBalances = () => {
 };
 
 // Define UsePrices interface
-interface PricesMap extends Record<Currency, number> {}
+interface PricesMap extends Record<string, number> {}
 interface UsePrices {
   (): PricesMap;
 }
 const usePrices: UsePrices = () => {
-  return {
-    [Currency.Osmosis]: 0,
-    [Currency.Ethereum]: 0,
-    [Currency.Arbitrum]: 0,
-    [Currency.Zilliqa]: 0,
-    [Currency.Neo]: 0,
-  };
+  return {};
 };
 
 // FIXED: Should create an map to store the priority of currency instead of use switch case
-interface PriorityMap extends Record<Currency, number> {}
+interface PriorityMap extends Record<string, number> {}
 const priorityMap: PriorityMap = {
-  [Currency.Osmosis]: 100,
-  [Currency.Ethereum]: 50,
-  [Currency.Arbitrum]: 30,
-  [Currency.Zilliqa]: 20,
-  [Currency.Neo]: 20,
+  Osmosis: 100,
+  Ethereum: 50,
+  Arbitrum: 30,
+  Zilliqa: 20,
+  Neo: 20,
 };
 
 // FIXED: Should define the min value of priority and amount as a constant
@@ -56,7 +41,7 @@ const CURRENCY_PRIORITY_MIN = -99;
 const CURRENCY_AMOUNT_MIN = 0;
 
 // FIXED: Should move functions that not depend on props inside the component to the top level
-const getPriority = (currency: Currency): number => {
+const getPriority = (currency: string): number => {
   if (!Object.keys(priorityMap).includes(currency)) {
     return CURRENCY_PRIORITY_MIN;
   }
