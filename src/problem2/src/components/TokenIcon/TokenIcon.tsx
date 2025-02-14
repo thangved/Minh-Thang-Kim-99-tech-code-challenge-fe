@@ -1,5 +1,5 @@
 import { TOKEN_BASE_IMAGE_URL, TOKEN_FALLBACK } from "@/const";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface TokenIconProps {
   name: string;
@@ -11,6 +11,10 @@ export default function TokenIcon({ name, size = 24 }: TokenIconProps) {
   const handleError = useCallback(() => {
     setUrl(`${TOKEN_BASE_IMAGE_URL}/${TOKEN_FALLBACK}.svg`);
   }, []);
+
+  useEffect(() => {
+    setUrl(`${TOKEN_BASE_IMAGE_URL}/${name}.svg`);
+  }, [name]);
 
   return (
     <img

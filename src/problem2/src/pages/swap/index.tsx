@@ -1,11 +1,9 @@
 import { TokenInput, TokenList } from "@/components";
-import { useTokens } from "@/hooks";
 import { useHotTokens } from "@/hooks/useHotTokens";
 import { Box, Card, Container, Grid2, Stack, Typography } from "@mui/material";
 
 export default function SwapPage() {
   const hotTokens = useHotTokens();
-  const tokens = useTokens();
 
   return (
     <Box minHeight="100dvh">
@@ -25,10 +23,10 @@ export default function SwapPage() {
             </Stack>
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <Card variant="outlined" sx={{ p: 2 }}>
+            <Card variant="outlined" sx={{ p: 4 }}>
               <Stack gap={1}>
-                <TokenInput label="Spend" placeholder="0.0" tokens={tokens} />
-                <TokenInput label="Receive" placeholder="0.0" tokens={tokens} />
+                <TokenInput label="Spend" placeholder="0.0" />
+                <TokenInput label="Receive" placeholder="0.0" />
               </Stack>
             </Card>
           </Grid2>

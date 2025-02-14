@@ -15,6 +15,15 @@ const theme = createTheme({
       fontWeight: 600,
     },
   },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 20,
+        },
+      },
+    },
+  },
 });
 
 function App() {
