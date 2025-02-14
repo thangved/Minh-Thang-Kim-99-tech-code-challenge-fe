@@ -1,6 +1,6 @@
+import { getTokenPrices } from "@/apis";
+import { Token } from "@/interfaces";
 import { use, useMemo } from "react";
-import { getTokenPrices } from "../apis";
-import { Token } from "../interfaces";
 
 const promise = getTokenPrices();
 

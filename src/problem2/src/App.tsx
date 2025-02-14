@@ -1,5 +1,7 @@
+import SwapPage from "./pages/swap";
+
 function App() {
-  return <></>;
+  return <SwapPage />;
 }
 
 export default App;
