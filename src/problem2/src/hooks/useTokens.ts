@@ -8,15 +8,19 @@ interface UseTokensProps {
   search?: string;
 }
 
-export function useTokens(props?: UseTokensProps): Token[] {
+interface UseTokens {
+  tokens: Token[];
+}
+
+export function useTokens(props?: UseTokensProps): UseTokens {
   const { search } = { ...props };
-  const prices = use(promise);
+  const tokens = use(promise);
   const sortedByDate = useMemo(
     () =>
-      prices.sort(
+      tokens.sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
       ),
-    [prices],
+    [tokens],
   );
   const uniqueTokens = useMemo(
     () =>
@@ -34,5 +38,5 @@ export function useTokens(props?: UseTokensProps): Token[] {
     [search, sortedByDate],
   );
 
-  return uniqueTokens;
+  return { tokens: uniqueTokens };
 }

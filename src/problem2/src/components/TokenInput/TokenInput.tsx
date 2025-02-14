@@ -27,7 +27,7 @@ export default function TokenInput({
   ...props
 }: TokenInputProps) {
   const [search, setSearch] = useState("");
-  const tokens = useTokens({ search });
+  const { tokens } = useTokens({ search });
 
   const [amount, setAmount] = useState(() =>
     value?.amount ? String(value?.amount) : "",
@@ -82,6 +82,7 @@ export default function TokenInput({
         slotProps={{ inputLabel: { sx: { display: "none" } } }}
         value={amount}
         onChange={handleChangeAmount}
+        autoComplete="off"
         {...props}
       />
       <Stack direction="row" justifyContent="end">
@@ -106,6 +107,7 @@ export default function TokenInput({
           <TextField
             placeholder="Search"
             label="Search"
+            autoComplete="off"
             slotProps={{
               input: {
                 endAdornment: (

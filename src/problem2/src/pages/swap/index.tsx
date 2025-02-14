@@ -3,7 +3,7 @@ import { useHotTokens } from "@/hooks/useHotTokens";
 import { Box, Card, Container, Grid2, Stack, Typography } from "@mui/material";
 
 export default function SwapPage() {
-  const hotTokens = useHotTokens();
+  const { hotTokens } = useHotTokens();
 
   return (
     <Box minHeight="100dvh">
