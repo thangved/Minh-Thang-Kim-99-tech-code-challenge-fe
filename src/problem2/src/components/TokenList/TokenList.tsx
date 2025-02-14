@@ -1,6 +1,6 @@
 import { Token } from "@/interfaces";
 import { Table, TableBody } from "@mui/material";
-import Empty from "../Empty/Empty";
+import Empty from "../Empty";
 import TokenListItem from "./TokenListItem";
 
 interface TokenListProps {
