@@ -51,10 +51,14 @@ const priorityMap: PriorityMap = {
   [Currency.Neo]: 20,
 };
 
+// FIXED: Should define the min value of priority and amount as a constant
+const CURRENCY_PRIORITY_MIN = -99;
+const CURRENCY_AMOUNT_MIN = 0;
+
 // FIXED: Should move functions that not depend on props inside the component to the top level
 const getPriority = (currency: Currency): number => {
   if (!Object.keys(priorityMap).includes(currency)) {
-    return -99;
+    return CURRENCY_PRIORITY_MIN;
   }
   return priorityMap[currency];
 };
@@ -71,8 +75,8 @@ const WalletPage: React.FC<Props> = (props: Props) => {
         // FIXED: maybe the correct property name is "currency" instead of "blockchain"
         const balancePriority = getPriority(balance.currency);
         // FIXED: incorrect variable name, apply early return
-        if (balancePriority <= -99) return false;
-        if (balance.amount <= 0) return true;
+        if (balancePriority <= CURRENCY_PRIORITY_MIN) return false;
+        if (balance.amount <= CURRENCY_AMOUNT_MIN) return true;
         return false;
       })
       .sort((lhs: WalletBalance, rhs: WalletBalance) => {
