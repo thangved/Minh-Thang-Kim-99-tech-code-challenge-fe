@@ -110,12 +110,13 @@ const WalletPage: React.FC<Props> = (props: Props) => {
   // FIXED: should use formattedBalances instead of sortedBalances and use useMemo to memoize the result
   const rows = useMemo(
     () =>
-      formattedBalances.map((balance, index: number) => {
+      formattedBalances.map((balance) => {
         const usdValue = prices[balance.currency] * balance.amount;
         return (
           <WalletRow
             className={classes.row}
-            key={index}
+            // Avoid using index as key
+            key={balance.currency}
             amount={balance.amount}
             usdValue={usdValue}
             formattedAmount={balance.formatted}
