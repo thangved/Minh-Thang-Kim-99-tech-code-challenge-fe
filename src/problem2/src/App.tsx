@@ -23,6 +23,24 @@ const theme = createTheme({
         },
       },
     },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+      styleOverrides: {
+        contained: {
+          background: "linear-gradient(90deg,#f90cff,#6560ff,#0cd7e8)",
+          ":disabled": {
+            opacity: 0.8,
+          },
+        },
+      },
+    },
+  },
+  palette: {
+    primary: {
+      main: "#6560ff",
+    },
   },
 });
 
