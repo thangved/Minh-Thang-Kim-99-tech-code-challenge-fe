@@ -4,7 +4,7 @@ import { use, useMemo } from "react";
 
 const promise = getTokenPrices();
 
-export function useTokenPrices(): Token[] {
+export function useTokens(): Token[] {
   const prices = use(promise);
   const sortedByDate = useMemo(
     () =>

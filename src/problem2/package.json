@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource/k2d": "^5.1.1",
     "@mui/material": "^6.4.4",
     "normalize.css": "^8.0.1",
     "react": "^19.0.0",
