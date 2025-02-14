@@ -1,5 +1,5 @@
+import SwapPage from "@/pages/swap";
 import { createTheme, ThemeProvider } from "@mui/material";
-import SwapPage from "./pages/swap";
 
 const theme = createTheme({
   shape: {
