@@ -1,5 +1,6 @@
 import { useTokens } from "@/hooks";
 import { Token } from "@/interfaces";
+import { formatNumber, stringToNumber } from "@/utils";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import {
   Chip,
@@ -10,12 +11,17 @@ import {
   TextField,
   TextFieldProps,
 } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SelectToken from "../SelectToken";
 import TokenIcon from "../TokenIcon";
 
+export interface TokenInputValue {
+  currency: string;
+  amount?: number;
+}
+
 interface TokenInputProps extends Omit<TextFieldProps, "onChange" | "value"> {
-  value?: { currency: string; amount: number };
+  value?: TokenInputValue;
   onChange?: (value: { currency: string; amount: number }) => void;
 }
 
@@ -37,10 +43,13 @@ export default function TokenInput({
 
   const handleChangeAmount = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value.replace(/[^0-9.]/g, "");
-      const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const formattedValue = formatNumber(e.target.value);
       setAmount(formattedValue);
-      onChange?.({ currency, amount: Number(value) });
+      try {
+        onChange?.({ currency, amount: stringToNumber(formattedValue) });
+      } catch {
+        // Just ignore
+      }
     },
     [currency, onChange],
   );
@@ -65,6 +74,13 @@ export default function TokenInput({
     },
     [onChange, handleCloseSelectToken],
   );
+
+  useEffect(() => {
+    if (!value) return;
+    if (value.currency === currency && value.amount === +amount) return;
+    setCurrency(value.currency);
+    setAmount(formatNumber(value.amount));
+  }, [amount, currency, value]);
 
   return (
     <Stack spacing={1} gap={1}>
