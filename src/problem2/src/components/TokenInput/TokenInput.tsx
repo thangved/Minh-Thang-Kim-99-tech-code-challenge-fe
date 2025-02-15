@@ -22,7 +22,7 @@ export interface TokenInputValue {
 
 interface TokenInputProps extends Omit<TextFieldProps, "onChange" | "value"> {
   value?: TokenInputValue;
-  onChange?: (value: { currency: string; amount: number }) => void;
+  onChange?: (value: TokenInputValue) => void;
 }
 
 export default function TokenInput({
@@ -42,9 +42,15 @@ export default function TokenInput({
   const handleChangeAmount = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       try {
-        onChange?.({ currency, amount: +e.target.value.replace(/,/g, "") });
+        const value = e.target.value;
+        if (!value) {
+          setAmount(undefined);
+          onChange?.({ currency, amount: undefined });
+          return;
+        }
+        onChange?.({ currency, amount: +value.replace(/,/g, "") });
       } catch {
-        // Just ignore
+        //
       }
     },
     [currency, onChange],

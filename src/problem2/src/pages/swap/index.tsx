@@ -33,13 +33,11 @@ export default function SwapPage() {
   });
 
   const handleChangeFromToken = useCallback((token: TokenInputValue) => {
-    if (!token.amount) return;
     setSwapReverse(false);
     setFromToken(token);
   }, []);
 
   const handleChangeToToken = useCallback((token: TokenInputValue) => {
-    if (!token.amount) return;
     setSwapReverse(true);
     setToToken(token);
   }, []);

@@ -50,17 +50,17 @@ export function useSwapTokens({
 
   const calculatedFromAmount = useMemo(() => {
     if (!reverse) return fromAmount;
+    if (!toAmount) return 0;
     if (!fromToken) return fromAmount;
     if (!toToken) return fromAmount;
-    if (!toAmount) return fromAmount;
     return (toToken.price / fromToken.price) * toAmount;
   }, [fromAmount, fromToken, reverse, toAmount, toToken]);
 
   const calculatedToAmount = useMemo(() => {
-    if (reverse) return fromAmount;
-    if (!fromToken) return toAmount;
-    if (!fromAmount) return toAmount;
+    if (reverse) return toAmount;
+    if (!fromAmount) return 0;
     if (!toToken) return toAmount;
+    if (!fromToken) return toAmount;
     return (fromToken.price / toToken.price) * fromAmount;
   }, [fromAmount, fromToken, reverse, toAmount, toToken]);
 
