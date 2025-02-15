@@ -1,6 +1,5 @@
 import { useTokens } from "@/hooks";
 import { Token } from "@/interfaces";
-import { formatNumber, stringToNumber } from "@/utils";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import {
   Chip,
@@ -12,6 +11,7 @@ import {
   TextFieldProps,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { NumericFormat } from "react-number-format";
 import SelectToken from "../SelectToken";
 import TokenIcon from "../TokenIcon";
 
@@ -32,9 +32,7 @@ export default function TokenInput({
   ...props
 }: TokenInputProps) {
   const { tokens, isFetching } = useTokens();
-  const [amount, setAmount] = useState(() =>
-    value?.amount ? String(value?.amount) : "",
-  );
+  const [amount, setAmount] = useState(() => value?.amount);
   const [currency, setCurrency] = useState(
     () => value?.currency || tokens[0]?.currency,
   );
@@ -43,10 +41,8 @@ export default function TokenInput({
 
   const handleChangeAmount = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const formattedValue = formatNumber(e.target.value);
-      setAmount(formattedValue);
       try {
-        onChange?.({ currency, amount: stringToNumber(formattedValue) });
+        onChange?.({ currency, amount: +e.target.value.replace(/,/g, "") });
       } catch {
         // Just ignore
       }
@@ -68,7 +64,7 @@ export default function TokenInput({
   const handleSelectToken = useCallback(
     (token: Token) => {
       setCurrency(token.currency);
-      setAmount("");
+      setAmount(undefined);
       onChange?.({ currency: token.currency, amount: 0 });
       handleCloseSelectToken();
     },
@@ -77,20 +73,24 @@ export default function TokenInput({
 
   useEffect(() => {
     if (!value) return;
-    if (value.currency === currency && value.amount === +amount) return;
+    if (value.currency === currency && value.amount === amount) return;
     setCurrency(value.currency);
-    setAmount(formatNumber(value.amount));
+    setAmount(value.amount);
   }, [amount, currency, value]);
 
   return (
     <Stack spacing={1} gap={1}>
       {label && <InputLabel htmlFor={props.id}>{label}</InputLabel>}
-      <TextField
+      <NumericFormat
+        customInput={TextField}
         slotProps={{ inputLabel: { sx: { display: "none" } } }}
         value={amount}
         onChange={handleChangeAmount}
         autoComplete="off"
-        {...props}
+        decimalScale={2}
+        type="text"
+        thousandSeparator
+        placeholder={props.placeholder}
       />
       <Stack direction="row" alignItems="center" justifyContent="end">
         {isFetching ? (

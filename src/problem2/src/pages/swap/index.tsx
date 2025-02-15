@@ -15,11 +15,9 @@ export default function SwapPage() {
   const { hotTokens, isFetching } = useHotTokens();
   const [fromToken, setFromToken] = useState<TokenInputValue>(() => ({
     currency: hotTokens[0]?.currency,
-    amount: 0,
   }));
   const [toToken, setToToken] = useState<TokenInputValue>(() => ({
     currency: hotTokens[1]?.currency,
-    amount: 0,
   }));
   const [swapReverse, setSwapReverse] = useState(false);
   const {
@@ -35,16 +33,16 @@ export default function SwapPage() {
   });
 
   const handleChangeFromToken = useCallback((token: TokenInputValue) => {
+    if (!token.amount) return;
     setSwapReverse(false);
     setFromToken(token);
   }, []);
 
   const handleChangeToToken = useCallback((token: TokenInputValue) => {
+    if (!token.amount) return;
     setSwapReverse(true);
     setToToken(token);
   }, []);
-
-  console.log(fromAmount, toAmount);
 
   return (
     <Box minHeight="100dvh">
