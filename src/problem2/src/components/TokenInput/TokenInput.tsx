@@ -1,5 +1,6 @@
 import { useTokens } from "@/hooks";
 import { Token } from "@/interfaces";
+import { formatCurrency } from "@/utils";
 import { KeyboardArrowDown } from "@mui/icons-material";
 import {
   Chip,
@@ -9,6 +10,7 @@ import {
   Stack,
   TextField,
   TextFieldProps,
+  Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { NumericFormat } from "react-number-format";
@@ -36,6 +38,7 @@ export default function TokenInput({
   const [currency, setCurrency] = useState(
     () => value?.currency || tokens[0]?.currency,
   );
+  const selectedToken = tokens.find((token) => token.currency === currency);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -98,7 +101,10 @@ export default function TokenInput({
         thousandSeparator
         placeholder={props.placeholder}
       />
-      <Stack direction="row" alignItems="center" justifyContent="end">
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography variant="caption" color="text.secondary">
+          {formatCurrency(selectedToken?.price || 0)}
+        </Typography>
         {isFetching ? (
           <CircularProgress size={24} />
         ) : (

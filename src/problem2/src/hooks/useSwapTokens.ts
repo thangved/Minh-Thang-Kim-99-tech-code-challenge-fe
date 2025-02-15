@@ -39,10 +39,10 @@ export function useSwapTokens({
     [to, tokens],
   );
   const error = useMemo(() => {
-    if (!fromToken) return "From token is required";
-    if (!toToken) return "To token is required";
+    if (!fromToken) return "Spend token is required";
+    if (!toToken) return "Receive token is required";
     if (fromToken?.currency === toToken?.currency)
-      return "From and To must be different";
+      return "Spend token and receive token cannot be the same";
     if (!fromAmount) return "Amount is required";
   }, [fromAmount, fromToken, toToken]);
 

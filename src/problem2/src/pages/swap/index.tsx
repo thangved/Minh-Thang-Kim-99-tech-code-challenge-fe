@@ -1,5 +1,6 @@
 import { TokenInput, TokenInputValue, TokenList } from "@/components";
 import { useHotTokens, useSwapTokens } from "@/hooks";
+import { Token } from "@/interfaces";
 import {
   Box,
   Button,
@@ -42,6 +43,11 @@ export default function SwapPage() {
     setToToken(token);
   }, []);
 
+  const handleClickHotToken = useCallback((token: Token) => {
+    setSwapReverse(false);
+    setToToken({ currency: token.currency });
+  }, []);
+
   return (
     <Box minHeight="100dvh">
       <Container maxWidth="lg" sx={{ py: 20 }}>
@@ -54,7 +60,11 @@ export default function SwapPage() {
               <Card variant="outlined" sx={{ p: 2 }}>
                 <Stack gap={2}>
                   <Typography variant="h3">Hot tokens</Typography>
-                  <TokenList loading={isFetching} tokens={hotTokens} />
+                  <TokenList
+                    loading={isFetching}
+                    tokens={hotTokens}
+                    onSelect={handleClickHotToken}
+                  />
                 </Stack>
               </Card>
             </Stack>
