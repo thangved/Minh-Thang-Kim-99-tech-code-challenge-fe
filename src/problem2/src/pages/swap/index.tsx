@@ -1,15 +1,8 @@
 import { TokenInput, TokenInputValue, TokenList } from "@/components";
 import { useHotTokens, useSwapTokens } from "@/hooks";
 import { Token } from "@/interfaces";
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Grid2,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { Box, Card, Container, Grid2, Stack, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 
 export default function SwapPage() {
@@ -25,6 +18,7 @@ export default function SwapPage() {
     fromAmount,
     toAmount,
     error: swapError,
+    isCalculating,
   } = useSwapTokens({
     from: fromToken.currency,
     to: toToken.currency,
@@ -84,12 +78,20 @@ export default function SwapPage() {
                   value={{ ...toToken, amount: toAmount }}
                   onChange={handleChangeToToken}
                 />
+
+                <LoadingButton
+                  loading={isCalculating}
+                  variant="contained"
+                  disabled={!!swapError}
+                  size="large"
+                  fullWidth
+                >
+                  Swap
+                </LoadingButton>
+
                 <Typography variant="body2" color="error">
                   {swapError}
                 </Typography>
-                <Button size="large" variant="contained" disabled={!!swapError}>
-                  Swap
-                </Button>
               </Stack>
             </Card>
           </Grid2>

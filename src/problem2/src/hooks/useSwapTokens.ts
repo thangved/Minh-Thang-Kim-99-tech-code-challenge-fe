@@ -1,4 +1,5 @@
-import { useCallback, useMemo } from "react";
+import { delay } from "@/utils";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTokens } from "./useTokens";
 
 interface UseSwapProps {
@@ -14,7 +15,7 @@ interface SwapResult {
 }
 
 interface UseSwap {
-  isCalling?: boolean;
+  isCalculating?: boolean;
   swap: () => Promise<SwapResult>;
   isSwapping?: boolean;
   toAmount?: number;
@@ -30,6 +31,7 @@ export function useSwapTokens({
   reverse,
 }: UseSwapProps): UseSwap {
   const { tokens } = useTokens();
+  const [isCalculating, setIsCalculating] = useState(false);
   const fromToken = useMemo(
     () => tokens.find((token) => token.currency === from),
     [from, tokens],
@@ -64,10 +66,20 @@ export function useSwapTokens({
     return (fromToken.price / toToken.price) * fromAmount;
   }, [fromAmount, fromToken, reverse, toAmount, toToken]);
 
+  useEffect(() => {
+    // Mock `isCalculating`
+    (async () => {
+      setIsCalculating(true);
+      await delay(1000);
+      setIsCalculating(false);
+    })();
+  }, [fromToken, toToken, fromAmount, toAmount]);
+
   return {
     swap,
     error,
     fromAmount: calculatedFromAmount,
     toAmount: calculatedToAmount,
+    isCalculating,
   };
 }

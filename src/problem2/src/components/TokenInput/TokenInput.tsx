@@ -73,11 +73,10 @@ export default function TokenInput({
   const handleSelectToken = useCallback(
     (token: Token) => {
       setCurrency(token.currency);
-      setAmount(undefined);
-      onChange?.({ currency: token.currency, amount: 0 });
+      onChange?.({ currency: token.currency, amount });
       handleCloseSelectToken();
     },
-    [onChange, handleCloseSelectToken],
+    [onChange, amount, handleCloseSelectToken],
   );
 
   useEffect(() => {
